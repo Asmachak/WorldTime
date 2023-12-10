@@ -1,0 +1,154 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_countdown_timer/current_remaining_time.dart';
+import 'package:flutter_countdown_timer/flutter_countdown_timer.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:sultan_mobile_app/helpers/constant.dart';
+
+class TimerReservation extends StatefulWidget {
+  const TimerReservation({super.key});
+
+  @override
+  State<TimerReservation> createState() => _TimerReservationState();
+}
+
+class _TimerReservationState extends State<TimerReservation> {
+  final int duration = 3 * 60 * 60; // 3 hours in seconds
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: SafeArea(
+        child: Column(
+          children: [
+            Row(
+              children: [
+                Padding(
+                  padding: EdgeInsets.only(
+                      top: ScreenUtil().setHeight(25),
+                      left: ScreenUtil().setWidth(19)),
+                  child: Row(
+                    children: [
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.pop(context);
+                        },
+                        child: Image(
+                          image: AssetImage('assets/images/arrow_back.png'),
+                          height: ScreenUtil().setHeight(21),
+                          width: ScreenUtil().setWidth(22),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(
+                      top: ScreenUtil().setHeight(25),
+                      right: ScreenUtil().setWidth(125),
+                      left: ScreenUtil().setWidth(12)),
+                  child: Text(
+                    "Minutrie",
+                    style: TextStyle(
+                      fontFamily: 'Poppins',
+                      fontSize: ScreenUtil().setSp(18),
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                )
+              ],
+            ),
+            SizedBox(
+              height: 50,
+            ),
+            Center(
+              child: Container(
+                height: 260.h,
+                width: 260.w,
+                decoration: BoxDecoration(
+                  color: primaryColor,
+                  shape: BoxShape.circle,
+                ),
+                child: Center(
+                  child: Container(
+                    height: 240.h,
+                    width: 240.w,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      shape: BoxShape.circle,
+                    ),
+                    child: Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            "IL VOUS RESTE",
+                            style: TextStyle(
+                              color: greyTextColor,
+                              fontSize: 18.sp,
+                              fontWeight: FontWeight.w500,
+                              fontFamily: 'Poppins',
+                            ),
+                          ),
+                          CountdownTimer(
+                            endTime: DateTime.now().millisecondsSinceEpoch +
+                                duration * 1000,
+                            widgetBuilder: (_, CurrentRemainingTime? time) {
+                              if (time == null) {
+                                // Timer has finished
+                                return Text('Countdown Complete');
+                              }
+
+                              // Format the remaining time
+                              final String hours =
+                                  '${time.hours}'.padLeft(2, '0');
+                              final String minutes =
+                                  '${time.min}'.padLeft(2, '0');
+                              final String seconds =
+                                  '${time.sec}'.padLeft(2, '0');
+
+                              // Display the remaining time
+                              return Text(
+                                '$hours:$minutes:$seconds',
+                                style: TextStyle(fontSize: 20.sp,fontFamily: 'Poppins',fontWeight: FontWeight.w500),
+                              );
+                            },
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            SizedBox(
+              height: MediaQuery.of(context).size.height * 0.05,
+            ),
+            ConstrainedBox(
+              constraints: BoxConstraints.tightFor(
+                  height: 52.h,
+                  width: 353.w),
+              child: ElevatedButton(
+                onPressed: () async {},
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: primaryColor,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(15.r),
+                  ),
+                ),
+                child:  Text(
+                  'Prolonger la réservation',
+                  style: TextStyle(
+                    fontSize: 16.sp,
+                    fontWeight: FontWeight.w500,
+                    fontFamily: 'Poppins',
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
